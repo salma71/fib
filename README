@@ -1,0 +1,16 @@
+# Tutorial for leaning how to build a docker image with multiple containers
+
+The application is a simple Fibonacci calculator. 
+You enter the index and it calculate the corresponding number in the fibonacci series.
+
+### Technologies used: 
+    - Node js as a back end.
+    - React (create-react-app) as frontend
+    - postgres database
+    - redis - cahch memory temp storage
+### Dev-ops technologies:
+    - Docker CLI
+    - docker-compose CLI
+    - Travis-CI
+    - AWS Cloud services
+    - Elastic BeanStalk 
