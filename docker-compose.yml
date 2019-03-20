@@ -1,0 +1,46 @@
+version: "3"
+services:
+  postgres:
+    image: "postgres:latest" #from dockerhub
+  redis:
+    image: "redis:latest"
+  server:
+    build:
+      dockerfile: Dockerfile.dev # just the name of the file
+      context: ./server #look inside the cuurent directory for a folder called server and
+      #inside that folder use all the files and all the folders to build the image
+
+    volumes:
+      - /app/node_modules #inside app directory don't touch node_modules
+      # or manipulate it leave it as is - book mark
+      - ./server:/app # look at the server directory and copy everything inside
+      #there into the app folder of the container
+      # so for that if I tried to access any file inside app (in the container)
+      # it will automatically redirected to the server folder (except for the node_modules)
+      # so this was I don't have to build my project after every change because it will reflected automatically
+
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+
+  client:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+
+    volumes:
+      - /app/node_modules
+      - ./client/app
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+
+    volumes:
+      - /app/node_modules
+      - ./worker/app
