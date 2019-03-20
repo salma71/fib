@@ -4,7 +4,7 @@ services:
     image: "postgres:latest" #from dockerhub
   redis:
     image: "redis:latest"
-  server:
+  api:
     build:
       dockerfile: Dockerfile.dev # just the name of the file
       context: ./server #look inside the cuurent directory for a folder called server and
