@@ -4,12 +4,25 @@ services:
     image: "postgres:latest" #from dockerhub
   redis:
     image: "redis:latest"
+  nginx:
+    image: "nginx:latest"
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    depends_on:
+      - client
+      - api
+    ports:
+      - "3050:80"
   api:
     build:
       dockerfile: Dockerfile.dev # just the name of the file
       context: ./server #look inside the cuurent directory for a folder called server and
       #inside that folder use all the files and all the folders to build the image
-
+    depends_on:
+      - postgres
+      - redis
     volumes:
       - /app/node_modules #inside app directory don't touch node_modules
       # or manipulate it leave it as is - book mark
@@ -18,7 +31,6 @@ services:
       # so for that if I tried to access any file inside app (in the container)
       # it will automatically redirected to the server folder (except for the node_modules)
       # so this was I don't have to build my project after every change because it will reflected automatically
-
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -40,7 +52,8 @@ services:
     build:
       dockerfile: Dockerfile.dev
       context: ./worker
-
+    depends_on:
+      - redis
     volumes:
       - /app/node_modules
       - ./worker/app
